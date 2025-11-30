@@ -1,14 +1,41 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import ApiKeyModal from '@/components/ApiKeyModal';
+import { loadData, resetData, saveData } from '@/lib/storage';
+import { SAMPLE_DATA } from '@/lib/sampleData';
 import styles from './Welcome.module.css';
 
 export default function WelcomePage() {
   const router = useRouter();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [hasExistingData, setHasExistingData] = useState(false);
+
+  useEffect(() => {
+    const data = loadData();
+    setHasExistingData(data !== null && data.answers.length > 0);
+  }, []);
+
+  const handleNewStart = () => {
+    resetData();
+    router.push('/question/1');
+  };
+
+  const handleContinue = () => {
+    const data = loadData();
+    if (data && data.groups.length > 0) {
+      router.push('/analysis');
+    } else {
+      router.push('/summary');
+    }
+  };
+
+  const handleSampleMode = () => {
+    saveData(SAMPLE_DATA);
+    router.push('/question/1');
+  };
 
   return (
     <div className={styles.container}>
@@ -79,16 +106,36 @@ export default function WelcomePage() {
           </div>
 
           <div className={styles.actions}>
-            <button
-              className={styles.startButton}
-              onClick={() => router.push('/question/1')}
-            >
-              始める
-            </button>
+            {hasExistingData ? (
+              <>
+                <button
+                  className={styles.continueButton}
+                  onClick={handleContinue}
+                >
+                  続きから始める
+                </button>
+                <button
+                  className={styles.newButton}
+                  onClick={handleNewStart}
+                >
+                  新規で始める
+                </button>
+              </>
+            ) : (
+              <button
+                className={styles.startButton}
+                onClick={() => router.push('/question/1')}
+              >
+                始める
+              </button>
+            )}
           </div>
 
           <div className={styles.info}>
             <p>所要時間：約15〜20分 • 回答数：24項目 • データはブラウザに保存されます</p>
+            <button onClick={handleSampleMode} className={styles.sampleButton}>
+              サンプルで試す
+            </button>
           </div>
         </div>
       </div>

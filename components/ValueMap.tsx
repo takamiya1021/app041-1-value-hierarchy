@@ -1,37 +1,16 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { UserData } from '@/lib/types';
-import { generateAIResponse } from '@/lib/ai';
 import { motion } from 'framer-motion';
 import styles from './ValueMap.module.css';
-
-interface Node {
-    id: string;
-    label: string;
-    color: string;
-    size: number;
-    x?: number;
-    y?: number;
-}
-
-interface Link {
-    source: string;
-    target: string;
-    reason: string;
-}
-
-interface MapData {
-    nodes: Node[];
-    links: Link[];
-}
 
 interface ValueMapProps {
     userData: UserData;
 }
 
 export default function ValueMap({ userData }: ValueMapProps) {
-    const [mapData, setMapData] = useState<MapData | null>(null);
+    const [imageData, setImageData] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     const containerRef = useRef<HTMLDivElement>(null);
@@ -39,7 +18,7 @@ export default function ValueMap({ userData }: ValueMapProps) {
     const generateMap = async () => {
         const apiKey = localStorage.getItem('gemini_api_key');
         if (!apiKey) {
-            setError('APIキーが設定されていません。AIチャットで設定してください。');
+            setError('APIキーが設定されていません。トップページの設定で設定してください。');
             return;
         }
 
@@ -47,30 +26,27 @@ export default function ValueMap({ userData }: ValueMapProps) {
         setError('');
 
         try {
-            const response = await generateAIResponse({
-                type: 'map',
-                data: userData,
-                apiKey
+            const response = await fetch('/api/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    type: 'map',
+                    data: userData,
+                    apiKey
+                })
             });
 
-            const parsedData: MapData = JSON.parse(response);
+            const result = await response.json();
 
-            // Simple force-directed layout simulation (or just random/circular for now)
-            // Assign random positions initially
-            const width = containerRef.current?.clientWidth || 600;
-            const height = 400;
+            if (!response.ok) {
+                throw new Error(result.message || 'Generation failed');
+            }
 
-            const nodesWithPos = parsedData.nodes.map((node, i) => {
-                const angle = (i / parsedData.nodes.length) * 2 * Math.PI;
-                const radius = 120;
-                return {
-                    ...node,
-                    x: width / 2 + Math.cos(angle) * radius,
-                    y: height / 2 + Math.sin(angle) * radius
-                };
-            });
-
-            setMapData({ ...parsedData, nodes: nodesWithPos });
+            if (result.isImage && result.result) {
+                setImageData(result.result);
+            } else {
+                throw new Error('No image data received');
+            }
 
         } catch (err) {
             console.error('Map Generation Error:', err);
@@ -84,7 +60,8 @@ export default function ValueMap({ userData }: ValueMapProps) {
         <div className={styles.container} ref={containerRef}>
             <div className={styles.header}>
                 <h3>価値観の地図</h3>
-                {!mapData && !isLoading && (
+                <p>AIがあなたの価値観のつながりを可視化します</p>
+                {!imageData && !isLoading && (
                     <button onClick={generateMap} className={styles.generateButton}>
                         マップを生成する
                     </button>
@@ -96,62 +73,29 @@ export default function ValueMap({ userData }: ValueMapProps) {
             {isLoading && (
                 <div className={styles.loading}>
                     <div className={styles.spinner}></div>
-                    <p>価値観のつながりを分析中...</p>
+                    <p>AIが価値観のつながりを描いています...</p>
                 </div>
             )}
 
-            {mapData && (
-                <div className={styles.mapArea}>
-                    <svg width="100%" height="400">
-                        {/* Links */}
-                        {mapData.links.map((link, i) => {
-                            const source = mapData.nodes.find(n => n.id === link.source);
-                            const target = mapData.nodes.find(n => n.id === link.target);
-                            if (!source || !target || !source.x || !source.y || !target.x || !target.y) return null;
-
-                            return (
-                                <g key={i}>
-                                    <line
-                                        x1={source.x}
-                                        y1={source.y}
-                                        x2={target.x}
-                                        y2={target.y}
-                                        stroke="#cbd5e1"
-                                        strokeWidth="2"
-                                    />
-                                </g>
-                            );
-                        })}
-
-                        {/* Nodes */}
-                        {mapData.nodes.map((node, i) => (
-                            <g key={node.id}>
-                                <circle
-                                    cx={node.x}
-                                    cy={node.y}
-                                    r={node.size * 5 + 20}
-                                    fill={node.color}
-                                    opacity="0.9"
-                                />
-                                <text
-                                    x={node.x}
-                                    y={node.y}
-                                    dy=".3em"
-                                    textAnchor="middle"
-                                    fill="white"
-                                    fontSize="12"
-                                    fontWeight="bold"
-                                    style={{ pointerEvents: 'none' }}
-                                >
-                                    {node.label}
-                                </text>
-                            </g>
-                        ))}
-                    </svg>
+            {imageData && (
+                <motion.div
+                    className={styles.mapArea}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <img
+                        src={`data:image/png;base64,${imageData}`}
+                        alt="価値観の地図"
+                        className={styles.mapImage}
+                    />
                     <div className={styles.legend}>
-                        <p>※ AIが価値観同士の関連性を分析してつなげています</p>
+                        <p>※ AIが生成したイメージ図です</p>
+                        <button onClick={generateMap} className={styles.regenerateButton}>
+                            再生成する
+                        </button>
                     </div>
-                </div>
+                </motion.div>
             )}
         </div>
     );

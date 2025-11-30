@@ -51,6 +51,7 @@
     border: 1px solid #d1d5db;
     border-radius: 6px;
     font-size: 0.875rem;
+    color: #000000;
 }
 
 .saveKeyButton {
@@ -131,6 +132,7 @@
     border: 1px solid #d1d5db;
     border-radius: 8px;
     font-size: 1rem;
+    color: #000000;
 }
 
 .inputArea input:focus {

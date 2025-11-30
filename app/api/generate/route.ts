@@ -36,24 +36,30 @@ ${userDataString}
                 break;
 
             case 'map':
-                systemPrompt = `
-Analyze the following user data (values and insights) and generate a "Value Map".
-Identify connections between different value groups.
-Return ONLY a valid JSON object with the following structure:
-{
-  "nodes": [
-    { "id": "group_id", "label": "Group Name", "color": "color_code", "size": number (based on importance/count) }
-  ],
-  "links": [
-    { "source": "group_id_1", "target": "group_id_2", "reason": "Short explanation of connection" }
-  ]
-}
-Do not include markdown formatting or code blocks. Just the raw JSON.
+                // Use gemini-3-pro-image-preview for visual value map
+                const mapModel = genAI.getGenerativeModel({ model: 'gemini-3-pro-image-preview' });
+                const mapPrompt = `Based on the following user's values and insights, create a "Value Map" visualization.
+Draw a mind-map style diagram with circles representing value groups.
+IMPORTANT: Inside each circle, write the Group Name in JAPANESE (日本語).
+Connect related groups with lines.
+Use colors specified in the data if possible, or use a harmonious color palette.
+Make it look professional, clean, and artistic.
+
 Current User Data:
 ${userDataString}
-`;
-                userPrompt = 'Generate value map JSON.';
-                break;
+
+Create a high-quality image of this value map with legible Japanese text.`;
+
+                const mapResult = await mapModel.generateContent(mapPrompt);
+                const mapResponse = mapResult.response;
+
+                const mapPart = mapResponse.candidates?.[0]?.content?.parts?.[0];
+                if (mapPart && 'inlineData' in mapPart && mapPart.inlineData?.data) {
+                    const base64Image = mapPart.inlineData.data;
+                    return NextResponse.json({ result: base64Image, isImage: true });
+                } else {
+                    throw new Error('No image generated');
+                }
 
             case 'future':
                 systemPrompt = `
@@ -66,6 +72,30 @@ ${userDataString}
 `;
                 userPrompt = 'Generate future self story.';
                 break;
+
+            case 'future-image':
+                // Use gemini-3-pro-image-preview for visual future representation
+                const imageModel = genAI.getGenerativeModel({ model: 'gemini-3-pro-image-preview' });
+                const imagePrompt = `Based on the following user's values and insights, create a beautiful visual representation of their life 10 years from now.
+Show a scene that embodies living by these values - include elements that represent career success, relationships, personal growth, and fulfillment.
+Make it inspiring, hopeful, and specific to their values.
+
+Current User Data:
+${userDataString}
+
+Create a detailed, vibrant illustration showing their future life.`;
+
+                const imageResult = await imageModel.generateContent(imagePrompt);
+                const imageResponse = imageResult.response;
+
+                // Get the generated image data
+                const imagePart = imageResponse.candidates?.[0]?.content?.parts?.[0];
+                if (imagePart && 'inlineData' in imagePart && imagePart.inlineData?.data) {
+                    const base64Image = imagePart.inlineData.data;
+                    return NextResponse.json({ result: base64Image, isImage: true });
+                } else {
+                    throw new Error('No image generated');
+                }
 
             default:
                 return NextResponse.json({ message: 'Invalid request type' }, { status: 400 });
