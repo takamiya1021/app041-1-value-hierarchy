@@ -4,6 +4,36 @@
     align-items: center;
     justify-content: center;
     padding: var(--spacing-lg);
+    position: relative;
+}
+
+.settingsButton {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    font-size: 1.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--shadow-md), 0 0 20px rgba(255, 255, 255, 0.1);
+    transition: all var(--transition-normal);
+    z-index: 10;
+    color: var(--color-text-white);
+}
+
+.settingsButton:hover {
+    transform: scale(1.1) rotate(90deg);
+    box-shadow: var(--shadow-lg), var(--shadow-glow);
+    border-color: rgba(255, 255, 255, 0.4);
+    background: var(--glass-bg-light);
 }
 
 .content {

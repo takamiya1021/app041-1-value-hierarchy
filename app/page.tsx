@@ -1,14 +1,28 @@
 'use client';
 
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import ApiKeyModal from '@/components/ApiKeyModal';
 import styles from './Welcome.module.css';
 
 export default function WelcomePage() {
   const router = useRouter();
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   return (
     <div className={styles.container}>
+      <button
+        className={styles.settingsButton}
+        onClick={() => setIsSettingsOpen(true)}
+        aria-label="設定"
+      >
+        ⚙️
+      </button>
+      <ApiKeyModal
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+      />
       <div className={styles.content}>
         <h1 className={styles.title}>価値の序列</h1>
         <p className={styles.subtitle}>あなたの本当の価値観を発見する</p>
