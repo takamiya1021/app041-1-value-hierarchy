@@ -284,14 +284,8 @@ npm run start
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/takamiya1021/app041-1-value-hierarchy)
 
-### Environment Variables
-
-Gemini AI機能を使用する場合、以下の環境変数をVercelで設定してください：
-
-```env
-# オプション: Gemini APIキー（アプリ内で設定可能）
-NEXT_PUBLIC_GEMINI_API_KEY=your-api-key-here
-```
+> **Note**: このアプリは完全にクライアントサイドで動作するため、Vercelでの環境変数設定は不要です。
+> ユーザーが各自でアプリ内からGemini APIキーを設定します（localStorageに安全に保存）。
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
