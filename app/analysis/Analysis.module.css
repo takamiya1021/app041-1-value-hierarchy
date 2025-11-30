@@ -1,31 +1,17 @@
-.container {
-    min-height: 100vh;
-    background-color: var(--color-bg);
-    padding: var(--spacing-xl) var(--spacing-lg);
-}
-
-.content {
-    max-width: 1200px;
-    margin: 0 auto;
-    animation: fadeIn 0.5s ease-out;
-}
-
-.header {
-    text-align: center;
-    margin-bottom: var(--spacing-xl);
-}
-
 .header h1 {
-    color: var(--color-primary);
+    color: var(--color-text-white);
 }
 
 .header p {
-    color: var(--color-text-light);
+    color: rgba(255, 255, 255, 0.8);
     font-size: 1.1rem;
 }
 
 .visualization {
-    background-color: var(--color-white);
+    background: var(--glass-bg-light);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
     border-radius: var(--radius-xl);
     padding: var(--spacing-xl);
     margin-bottom: var(--spacing-xl);
@@ -33,7 +19,7 @@
 }
 
 .visualization h2 {
-    color: var(--color-primary);
+    color: var(--color-text-white);
     margin-bottom: var(--spacing-lg);
 }
 
@@ -54,7 +40,10 @@
 }
 
 .insights {
-    background-color: var(--color-white);
+    background: var(--glass-bg-light);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
     border-radius: var(--radius-xl);
     padding: var(--spacing-xl);
     margin-bottom: var(--spacing-xl);
@@ -62,12 +51,12 @@
 }
 
 .insights h2 {
-    color: var(--color-primary);
+    color: var(--color-text-white);
     margin-bottom: var(--spacing-sm);
 }
 
 .insights>p {
-    color: var(--color-text-light);
+    color: rgba(255, 255, 255, 0.8);
     margin-bottom: var(--spacing-lg);
 }
 
@@ -77,26 +66,29 @@
 }
 
 .insightCard {
-    background-color: hsl(210, 20%, 98%);
+    background: var(--glass-bg);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border-radius: var(--radius-lg);
     padding: var(--spacing-lg);
+    border: 1px solid var(--glass-border);
     border-left: 4px solid;
 }
 
 .insightCard h3 {
-    color: var(--color-primary);
+    color: var(--color-text-white);
     margin-bottom: var(--spacing-md);
 }
 
 .groupItems {
     margin-bottom: var(--spacing-md);
     padding: var(--spacing-md);
-    background-color: var(--color-white);
+    background: rgba(255, 255, 255, 0.05);
     border-radius: var(--radius-md);
 }
 
 .groupItem {
-    color: var(--color-text);
+    color: rgba(255, 255, 255, 0.9);
     padding: var(--spacing-xs) 0;
     line-height: 1.6;
 }
@@ -109,7 +101,7 @@
 
 .reflectionField label {
     font-weight: 600;
-    color: var(--color-primary);
+    color: var(--color-text-white);
 }
 
 .reflectionField textarea {
@@ -128,21 +120,11 @@
     font-size: 1.1rem;
 }
 
-.noGroups {
-    background-color: var(--color-white);
-    border-radius: var(--radius-xl);
-    padding: var(--spacing-xl);
-    text-align: center;
-    margin-bottom: var(--spacing-xl);
-}
-
-.noGroups p {
-    color: var(--color-text-light);
-    margin-bottom: var(--spacing-lg);
-}
-
 .export {
-    background-color: var(--color-white);
+    background: var(--glass-bg-light);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
     border-radius: var(--radius-xl);
     padding: var(--spacing-xl);
     margin-bottom: var(--spacing-xl);
@@ -150,7 +132,7 @@
 }
 
 .export h2 {
-    color: var(--color-primary);
+    color: var(--color-text-white);
     margin-bottom: var(--spacing-lg);
     text-align: center;
 }

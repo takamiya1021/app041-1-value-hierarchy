@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import { loadData, saveData, exportDataAsJSON, exportDataAsText } from '@/lib/storage';
 import { UserData, Insight } from '@/lib/types';
@@ -18,12 +19,24 @@ const GROUP_COLORS = [
     'hsl(320, 70%, 60%)',
 ];
 
+type ExportConfig = {
+    type: 'json' | 'text';
+    content: string;
+    filename: string;
+};
+
 export default function AnalysisPage() {
     const router = useRouter();
     const [data, setData] = useState<UserData | null>(null);
     const [insights, setInsights] = useState<Map<string, string>>(new Map());
 
+    // モーダル用state
+    const [showModal, setShowModal] = useState(false);
+    const [exportConfig, setExportConfig] = useState<ExportConfig | null>(null);
+    const [mounted, setMounted] = useState(false);
+
     useEffect(() => {
+        setMounted(true);
         const loaded = loadData();
         if (!loaded || loaded.answers.length === 0) {
             router.push('/');
@@ -63,24 +76,53 @@ export default function AnalysisPage() {
         setData(updatedData);
     };
 
-    const handleExportJSON = () => {
-        const json = exportDataAsJSON(data);
-        const blob = new Blob([json], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `value-hierarchy-${Date.now()}.json`;
-        a.click();
+    // エクスポートボタンクリック時の処理（モーダル表示）
+    const handleExportClick = (type: 'json' | 'text') => {
+        const date = new Date().toISOString().split('T')[0];
+        let content = '';
+        let filename = '';
+
+        if (type === 'json') {
+            content = exportDataAsJSON(data);
+            filename = `value-hierarchy-${date}.json`;
+        } else {
+            content = exportDataAsText(data);
+            filename = `value-hierarchy-${date}.txt`;
+        }
+
+        setExportConfig({ type, content, filename });
+        setShowModal(true);
     };
 
-    const handleExportText = () => {
-        const text = exportDataAsText(data);
-        const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `value-hierarchy-${Date.now()}.txt`;
-        a.click();
+    // ダウンロード実行処理
+    const executeDownload = () => {
+        if (!exportConfig) return;
+
+        const { type, content, filename } = exportConfig;
+        let url = '';
+
+        try {
+            if (type === 'json') {
+                url = `data:application/json;charset=utf-8,${encodeURIComponent(content)}`;
+            } else {
+                url = `data:text/plain;charset=utf-8,${encodeURIComponent(content)}`;
+            }
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.style.display = 'none';
+
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+
+            setShowModal(false);
+            setExportConfig(null);
+        } catch (error) {
+            console.error('Download failed:', error);
+            alert('ダウンロードに失敗しました。');
+        }
     };
 
     // グループごとの回答数を集計
@@ -111,7 +153,11 @@ export default function AnalysisPage() {
                                         <XAxis dataKey="name" />
                                         <YAxis />
                                         <Tooltip />
-                                        <Bar dataKey="count" fill="hsl(270, 40%, 50%)" />
+                                        <Bar dataKey="count">
+                                            {groupData.map((entry, index) => (
+                                                <Cell key={`cell-${index}`} fill={entry.color} />
+                                            ))}
+                                        </Bar>
                                     </BarChart>
                                 </ResponsiveContainer>
                             </div>
@@ -196,10 +242,10 @@ export default function AnalysisPage() {
                 <div className={styles.export}>
                     <h2>結果のエクスポート</h2>
                     <div className={styles.exportButtons}>
-                        <button onClick={handleExportJSON}>
+                        <button type="button" onClick={() => handleExportClick('json')}>
                             📄 JSONでダウンロード
                         </button>
-                        <button onClick={handleExportText}>
+                        <button type="button" onClick={() => handleExportClick('text')}>
                             📝 テキストでダウンロード
                         </button>
                     </div>
@@ -219,6 +265,42 @@ export default function AnalysisPage() {
                         🏠 最初に戻る
                     </button>
                 </div>
+
+                {/* 確認モーダル（Portalでbody直下に描画） */}
+                {showModal && exportConfig && mounted && createPortal(
+                    <div className={styles.modalOverlay}>
+                        <div className={styles.modalContent}>
+                            <h2>ダウンロードの確認</h2>
+                            <p>以下の内容でファイルを保存しますか？</p>
+
+                            <div className={styles.previewContainer}>
+                                <label>ファイル名:</label>
+                                <div className={styles.fileName}>{exportConfig.filename}</div>
+
+                                <label>内容プレビュー:</label>
+                                <div className={styles.previewArea}>
+                                    {exportConfig.content}
+                                </div>
+                            </div>
+
+                            <div className={styles.modalActions}>
+                                <button
+                                    className={styles.cancelButton}
+                                    onClick={() => setShowModal(false)}
+                                >
+                                    キャンセル
+                                </button>
+                                <button
+                                    className={styles.confirmButton}
+                                    onClick={executeDownload}
+                                >
+                                    ダウンロード実行
+                                </button>
+                            </div>
+                        </div>
+                    </div>,
+                    document.body
+                )}
             </div>
         </div>
     );

@@ -1,6 +1,5 @@
 .container {
     min-height: 100vh;
-    background-color: var(--color-bg);
     padding: var(--spacing-xl) var(--spacing-lg);
 }
 
@@ -16,16 +15,19 @@
 }
 
 .header h1 {
-    color: var(--color-primary);
+    color: var(--color-text-white);
 }
 
 .header p {
-    color: var(--color-text-light);
+    color: rgba(255, 255, 255, 0.8);
     font-size: 1.1rem;
 }
 
 .groupCreator {
-    background-color: var(--color-white);
+    background: var(--glass-bg-light);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
     border-radius: var(--radius-xl);
     padding: var(--spacing-xl);
     margin-bottom: var(--spacing-xl);
@@ -33,7 +35,7 @@
 }
 
 .groupCreator h2 {
-    color: var(--color-primary);
+    color: var(--color-text-white);
     margin-bottom: var(--spacing-sm);
 }
 
@@ -56,7 +58,7 @@
 }
 
 .existingGroups h2 {
-    color: var(--color-primary);
+    color: var(--color-text-white);
     margin-bottom: var(--spacing-md);
 }
 
@@ -66,9 +68,13 @@
 }
 
 .groupCard {
-    background-color: var(--color-white);
+    background: var(--glass-bg-light);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border-radius: var(--radius-lg);
     padding: var(--spacing-lg);
+    border-left: 4px solid;
+    border: 1px solid var(--glass-border);
     border-left: 4px solid;
     box-shadow: var(--shadow-sm);
 }
@@ -82,12 +88,12 @@
 
 .groupHeader h3 {
     margin: 0;
-    color: var(--color-primary);
+    color: var(--color-text-white);
 }
 
 .removeButton {
     background-color: transparent;
-    color: var(--color-text-light);
+    color: rgba(255, 255, 255, 0.6);
     padding: var(--spacing-xs);
     font-size: 1.2rem;
     border: none;
@@ -107,8 +113,8 @@
 
 .groupCard li {
     padding: var(--spacing-xs) 0;
-    color: var(--color-text);
-    border-bottom: 1px solid var(--color-border);
+    color: rgba(255, 255, 255, 0.9);
+    border-bottom: 1px solid var(--glass-border);
 }
 
 .groupCard li:last-child {
@@ -120,7 +126,7 @@
 }
 
 .allAnswers h2 {
-    color: var(--color-primary);
+    color: var(--color-text-white);
     margin-bottom: var(--spacing-md);
 }
 
@@ -141,10 +147,13 @@
 }
 
 .answerItem {
-    background-color: var(--color-white);
+    background: var(--glass-bg);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     padding: var(--spacing-md);
     border-radius: var(--radius-md);
-    border-left: 2px solid var(--color-border);
+    border-left: 2px solid var(--glass-border);
+    border: 1px solid var(--glass-border);
     cursor: pointer;
     transition: all var(--transition-fast);
 }
@@ -155,20 +164,21 @@
 }
 
 .answerItem.selected {
-    background-color: hsl(270, 40%, 95%);
+    background: var(--glass-bg-light);
     border-left-color: var(--color-secondary);
     border-left-width: 4px;
+    border-color: var(--color-secondary);
 }
 
 .answerText {
-    color: var(--color-text);
+    color: var(--color-text-white);
     font-weight: 500;
     margin-bottom: var(--spacing-xs);
 }
 
 .answerPurpose {
     font-size: 0.9rem;
-    color: var(--color-text-light);
+    color: rgba(255, 255, 255, 0.7);
     margin-top: var(--spacing-xs);
     padding-left: var(--spacing-md);
     border-left: 2px solid var(--color-accent);
@@ -176,7 +186,7 @@
 
 .answerGroup {
     font-size: 0.85rem;
-    color: var(--color-text-light);
+    color: rgba(255, 255, 255, 0.6);
     margin-top: var(--spacing-xs);
 }
 

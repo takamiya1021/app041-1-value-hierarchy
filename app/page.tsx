@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import styles from './Welcome.module.css';
 
 export default function WelcomePage() {
@@ -23,36 +24,58 @@ export default function WelcomePage() {
 
           <div className={styles.features}>
             <div className={styles.feature}>
-              <div className={styles.featureIcon}>📊</div>
+              <div className={styles.featureIcon}>
+                <Image
+                  src="/images/feature-perspectives.png"
+                  alt="8つの観点"
+                  width={120}
+                  height={120}
+                  className={styles.iconImage}
+                />
+              </div>
               <h3>8つの観点</h3>
               <p>空間、時間、エネルギー、お金など、多角的に分析</p>
             </div>
             <div className={styles.feature}>
-              <div className={styles.featureIcon}>💡</div>
+              <div className={styles.featureIcon}>
+                <Image
+                  src="/images/feature-insights.png"
+                  alt="深い洞察"
+                  width={120}
+                  height={120}
+                  className={styles.iconImage}
+                />
+              </div>
               <h3>深い洞察</h3>
               <p>回答をグループ化し、価値観の本質を探る</p>
             </div>
             <div className={styles.feature}>
-              <div className={styles.featureIcon}>📈</div>
+              <div className={styles.featureIcon}>
+                <Image
+                  src="/images/feature-visualization.png"
+                  alt="可視化"
+                  width={120}
+                  height={120}
+                  className={styles.iconImage}
+                />
+              </div>
               <h3>可視化</h3>
               <p>チャートやグラフで価値観を視覚的に理解</p>
             </div>
           </div>
 
-          <div className={styles.info}>
-            <p><strong>所要時間：</strong>約15〜20分</p>
-            <p><strong>回答数：</strong>24項目（各カテゴリー3つずつ）</p>
-            <p><strong>プライバシー：</strong>すべてのデータはブラウザに保存されます</p>
+          <div className={styles.actions}>
+            <button
+              className={styles.startButton}
+              onClick={() => router.push('/question/1')}
+            >
+              始める
+            </button>
           </div>
-        </div>
 
-        <div className={styles.actions}>
-          <button
-            className={styles.startButton}
-            onClick={() => router.push('/question/1')}
-          >
-            始める
-          </button>
+          <div className={styles.info}>
+            <p>所要時間：約15〜20分 • 回答数：24項目 • データはブラウザに保存されます</p>
+          </div>
         </div>
       </div>
     </div>
