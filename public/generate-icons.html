@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWA Icon Generator - 宝石モチーフ</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #1a1a2e;
+            color: #fff;
+        }
+        h1 {
+            color: #6366f1;
+        }
+        .preview {
+            display: flex;
+            gap: 20px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        .preview-item {
+            text-align: center;
+        }
+        canvas {
+            border: 2px solid #6366f1;
+            border-radius: 8px;
+            background: white;
+        }
+        button {
+            background: #6366f1;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #4f46e5;
+        }
+        .controls {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>💎 PWA Icon Generator - 宝石モチーフ</h1>
+    <p>ダイヤモンドをイメージしたアイコンを生成します</p>
+
+    <div class="controls">
+        <button onclick="generateAllIcons()">すべてのアイコンを生成してダウンロード</button>
+    </div>
+
+    <div class="preview" id="preview"></div>
+
+    <script>
+        const sizes = [
+            { size: 192, name: 'icon-192.png' },
+            { size: 512, name: 'icon-512.png' },
+            { size: 180, name: 'icon-180.png' }
+        ];
+
+        function drawDiamond(canvas, size) {
+            const ctx = canvas.getContext('2d');
+            canvas.width = size;
+            canvas.height = size;
+
+            // 背景グラデーション（深い紫から青へ）
+            const bgGradient = ctx.createLinearGradient(0, 0, size, size);
+            bgGradient.addColorStop(0, '#1a1a2e');
+            bgGradient.addColorStop(1, '#16213e');
+            ctx.fillStyle = bgGradient;
+            ctx.fillRect(0, 0, size, size);
+
+            const centerX = size / 2;
+            const centerY = size / 2;
+            const diamondSize = size * 0.6;
+
+            // ダイヤモンド形状の座標
+            const top = { x: centerX, y: centerY - diamondSize / 2 };
+            const right = { x: centerX + diamondSize / 2, y: centerY };
+            const bottom = { x: centerX, y: centerY + diamondSize / 2 };
+            const left = { x: centerX - diamondSize / 2, y: centerY };
+
+            // ダイヤモンドのメイングラデーション（宝石の輝き）
+            const gradient = ctx.createLinearGradient(
+                centerX - diamondSize / 2,
+                centerY - diamondSize / 2,
+                centerX + diamondSize / 2,
+                centerY + diamondSize / 2
+            );
+            gradient.addColorStop(0, '#a78bfa');  // 薄い紫
+            gradient.addColorStop(0.3, '#8b5cf6'); // 紫
+            gradient.addColorStop(0.6, '#6366f1'); // インディゴ
+            gradient.addColorStop(1, '#3b82f6');   // 青
+
+            // ダイヤモンド本体を描画
+            ctx.beginPath();
+            ctx.moveTo(top.x, top.y);
+            ctx.lineTo(right.x, right.y);
+            ctx.lineTo(bottom.x, bottom.y);
+            ctx.lineTo(left.x, left.y);
+            ctx.closePath();
+            ctx.fillStyle = gradient;
+            ctx.fill();
+
+            // ダイヤモンドの輪郭（より明るく）
+            ctx.strokeStyle = '#c4b5fd';
+            ctx.lineWidth = size * 0.015;
+            ctx.stroke();
+
+            // 中央のファセット（カット面）
+            const facetSize = diamondSize * 0.3;
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY - facetSize / 2);
+            ctx.lineTo(centerX + facetSize / 2, centerY);
+            ctx.lineTo(centerX, centerY + facetSize / 2);
+            ctx.lineTo(centerX - facetSize / 2, centerY);
+            ctx.closePath();
+
+            const facetGradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, facetSize);
+            facetGradient.addColorStop(0, 'rgba(255, 255, 255, 0.8)');
+            facetGradient.addColorStop(0.5, 'rgba(196, 181, 253, 0.6)');
+            facetGradient.addColorStop(1, 'rgba(139, 92, 246, 0.3)');
+            ctx.fillStyle = facetGradient;
+            ctx.fill();
+
+            // 光の反射（ハイライト）
+            ctx.beginPath();
+            ctx.arc(centerX - diamondSize / 6, centerY - diamondSize / 6, diamondSize / 8, 0, Math.PI * 2);
+            const highlightGradient = ctx.createRadialGradient(
+                centerX - diamondSize / 6, centerY - diamondSize / 6, 0,
+                centerX - diamondSize / 6, centerY - diamondSize / 6, diamondSize / 8
+            );
+            highlightGradient.addColorStop(0, 'rgba(255, 255, 255, 0.9)');
+            highlightGradient.addColorStop(0.5, 'rgba(255, 255, 255, 0.5)');
+            highlightGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+            ctx.fillStyle = highlightGradient;
+            ctx.fill();
+
+            // カット線（ファセットの詳細）
+            ctx.strokeStyle = 'rgba(196, 181, 253, 0.4)';
+            ctx.lineWidth = size * 0.008;
+
+            // 上部のカット
+            ctx.beginPath();
+            ctx.moveTo(top.x, top.y);
+            ctx.lineTo(centerX, centerY);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(right.x, right.y);
+            ctx.lineTo(centerX, centerY);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(bottom.x, bottom.y);
+            ctx.lineTo(centerX, centerY);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(left.x, left.y);
+            ctx.lineTo(centerX, centerY);
+            ctx.stroke();
+        }
+
+        function downloadCanvas(canvas, filename) {
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        function generateAllIcons() {
+            const preview = document.getElementById('preview');
+            preview.innerHTML = '';
+
+            sizes.forEach(({ size, name }) => {
+                const container = document.createElement('div');
+                container.className = 'preview-item';
+
+                const canvas = document.createElement('canvas');
+                drawDiamond(canvas, size);
+
+                const label = document.createElement('p');
+                label.textContent = `${size}x${size}`;
+
+                const downloadBtn = document.createElement('button');
+                downloadBtn.textContent = `${name} をダウンロード`;
+                downloadBtn.onclick = () => downloadCanvas(canvas, name);
+
+                container.appendChild(canvas);
+                container.appendChild(label);
+                container.appendChild(downloadBtn);
+                preview.appendChild(container);
+
+                // 自動ダウンロード（1秒遅延で）
+                setTimeout(() => {
+                    downloadCanvas(canvas, name);
+                }, 1000 + sizes.indexOf({ size, name }) * 500);
+            });
+
+            alert('アイコンの生成が完了しました！各アイコンが自動的にダウンロードされます。');
+        }
+
+        // ページ読み込み時にプレビューを表示
+        window.onload = () => {
+            const preview = document.getElementById('preview');
+            sizes.forEach(({ size, name }) => {
+                const container = document.createElement('div');
+                container.className = 'preview-item';
+
+                const canvas = document.createElement('canvas');
+                drawDiamond(canvas, size);
+
+                const label = document.createElement('p');
+                label.textContent = `${size}x${size}`;
+
+                const downloadBtn = document.createElement('button');
+                downloadBtn.textContent = `${name} をダウンロード`;
+                downloadBtn.onclick = () => downloadCanvas(canvas, name);
+
+                container.appendChild(canvas);
+                container.appendChild(label);
+                container.appendChild(downloadBtn);
+                preview.appendChild(container);
+            });
+        };
+    </script>
+</body>
+</html>

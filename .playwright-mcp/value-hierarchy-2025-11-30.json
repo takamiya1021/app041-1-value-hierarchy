@@ -1,0 +1,159 @@
+{
+  "answers": [
+    {
+      "id": 1,
+      "category": 1,
+      "index": 1,
+      "text": "デスク周りの仕事環境"
+    },
+    {
+      "id": 2,
+      "category": 1,
+      "index": 2,
+      "text": "本棚と資料",
+      "purpose": "学習と情報収集のため"
+    },
+    {
+      "id": 3,
+      "category": 1,
+      "index": 3,
+      "text": "趣味のスペース"
+    },
+    {
+      "id": 4,
+      "category": 2,
+      "index": 1,
+      "text": "プログラミング作業"
+    },
+    {
+      "id": 5,
+      "category": 2,
+      "index": 2,
+      "text": "読書と学習",
+      "purpose": "スキルアップのため"
+    },
+    {
+      "id": 6,
+      "category": 2,
+      "index": 3,
+      "text": "運動と健康管理"
+    },
+    {
+      "id": 7,
+      "category": 3,
+      "index": 1,
+      "text": "新しい技術の習得"
+    },
+    {
+      "id": 8,
+      "category": 3,
+      "index": 2,
+      "text": "プロジェクトの成功",
+      "purpose": "目標達成のため"
+    },
+    {
+      "id": 9,
+      "category": 3,
+      "index": 3,
+      "text": "人間関係の構築"
+    },
+    {
+      "id": 10,
+      "category": 4,
+      "index": 1,
+      "text": "技術書籍と教材"
+    },
+    {
+      "id": 11,
+      "category": 4,
+      "index": 2,
+      "text": "オンライン講座",
+      "purpose": "知識の習得のため"
+    },
+    {
+      "id": 12,
+      "category": 4,
+      "index": 3,
+      "text": "ツールとソフトウェア"
+    },
+    {
+      "id": 13,
+      "category": 5,
+      "index": 1,
+      "text": "アプリのアイデア"
+    },
+    {
+      "id": 14,
+      "category": 5,
+      "index": 2,
+      "text": "技術的課題の解決",
+      "purpose": "プロジェクトの改善のため"
+    },
+    {
+      "id": 15,
+      "category": 5,
+      "index": 3,
+      "text": "将来のキャリア"
+    },
+    {
+      "id": 16,
+      "category": 6,
+      "index": 1,
+      "text": "技術的な話題"
+    },
+    {
+      "id": 17,
+      "category": 6,
+      "index": 2,
+      "text": "プロジェクトの進捗",
+      "purpose": "情報共有のため"
+    },
+    {
+      "id": 18,
+      "category": 6,
+      "index": 3,
+      "text": "日常の出来事"
+    },
+    {
+      "id": 19,
+      "category": 7,
+      "index": 1,
+      "text": "最新のプログラミング技術"
+    },
+    {
+      "id": 20,
+      "category": 7,
+      "index": 2,
+      "text": "データ分析手法",
+      "purpose": "業務効率化のため"
+    },
+    {
+      "id": 21,
+      "category": 7,
+      "index": 3,
+      "text": "デザインスキル"
+    },
+    {
+      "id": 22,
+      "category": 8,
+      "index": 1,
+      "text": "毎日のタスク管理"
+    },
+    {
+      "id": 23,
+      "category": 8,
+      "index": 2,
+      "text": "健康管理",
+      "purpose": "パフォーマンス維持のため"
+    },
+    {
+      "id": 24,
+      "category": 8,
+      "index": 3,
+      "text": "デジタルファイル管理"
+    }
+  ],
+  "groups": [],
+  "insights": [],
+  "timestamp": 1764487362114
+}
