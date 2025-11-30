@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 import { loadData, saveData, exportDataAsJSON, exportDataAsText } from '@/lib/storage';
 import { UserData, Insight } from '@/lib/types';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import SocraticChat from '@/components/SocraticChat';
+import ValueMap from '@/components/ValueMap';
 import styles from './Analysis.module.css';
 
 const GROUP_COLORS = [
@@ -236,6 +238,14 @@ export default function AnalysisPage() {
                             まとめ画面に戻る
                         </button>
                     </div>
+                )}
+
+                {/* AIチャットセクション */}
+                {data.groups.length > 0 && (
+                    <>
+                        <SocraticChat userData={data} />
+                        <ValueMap userData={data} />
+                    </>
                 )}
 
                 {/* エクスポートセクション */}

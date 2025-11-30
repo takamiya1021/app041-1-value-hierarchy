@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { loadData, saveData } from '@/lib/storage';
 import { UserData, Group, CATEGORIES } from '@/lib/types';
+import FutureSelf from '@/components/FutureSelf';
 import styles from './Summary.module.css';
 
 const GROUP_COLORS = [
@@ -207,6 +208,11 @@ export default function SummaryPage() {
                         ))}
                     </div>
                 </div>
+
+                {/* AI 未来シミュレーター */}
+                {data.groups.length > 0 && (
+                    <FutureSelf userData={data} />
+                )}
 
                 <div className={styles.navigation}>
                     <button

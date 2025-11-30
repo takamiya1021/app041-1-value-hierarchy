@@ -1,0 +1,86 @@
+.container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    margin-top: 2rem;
+    min-height: 300px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #1f2937;
+}
+
+.generateButton {
+    padding: 0.5rem 1rem;
+    background-color: #4f46e5;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.generateButton:hover {
+    background-color: #4338ca;
+}
+
+.error {
+    color: #ef4444;
+    background-color: #fee2e2;
+    padding: 0.75rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+}
+
+.loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+    color: #6b7280;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #e5e7eb;
+    border-top-color: #4f46e5;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.mapArea {
+    width: 100%;
+    height: 400px;
+    background-color: #f8fafc;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+}
+
+.legend {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    font-size: 0.75rem;
+    color: #94a3b8;
+}
