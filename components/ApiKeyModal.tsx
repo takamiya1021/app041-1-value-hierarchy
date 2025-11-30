@@ -54,6 +54,14 @@ export default function ApiKeyModal({ isOpen, onClose }: ApiKeyModalProps) {
                         </div>
                         <div className={styles.content}>
                             <p>AI機能を使用するには、Google Gemini APIキーが必要です。</p>
+                            <a
+                                href="https://aistudio.google.com/app/apikey"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={styles.link}
+                            >
+                                Google AI Studioでキーを取得する ↗
+                            </a>
                             <p className={styles.note}>※ キーはブラウザにのみ保存され、サーバーには送信されません。</p>
                             <input
                                 type="password"
