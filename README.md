@@ -1,36 +1,103 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 価値の序列アプリ
 
-## Getting Started
+あなたの本当の価値観を発見する自己分析Webアプリケーション
 
-First, run the development server:
+## 概要
+
+日常の具体的な事実（空間、時間、お金の使い方など）から、自分が本当に大切にしているものを見つけ出すアプリです。
+
+## 機能
+
+### 8つの観点から自己分析
+1. **空間の使い方** - 身の回りに何が多いか
+2. **時間の使い方** - 何に時間を使っているか
+3. **エネルギーの注ぎ方** - 何に夢中になるか
+4. **お金の使い方** - 何にお金を使っているか
+5. **思考の傾向** - 何をよく想像するか
+6. **コミュニケーション** - 何を話題にするか
+7. **学習の方向性** - 何を学びたいか
+8. **自己管理** - 何を律しているか
+
+### 主な機能
+- ✅ 8カテゴリー × 3項目 = 24項目の質問フロー
+- ✅ プログレスバーで進捗確認
+- ✅ 自動保存機能（localStorage）
+- ✅ 回答のグルーピング機能
+- ✅ データ可視化（バーチャート、円グラフ）
+- ✅ 深掘り分析（各グループの「なぜ？」）
+- ✅ エクスポート機能（JSON、テキスト）
+
+## 技術スタック
+
+- **Next.js 15** (App Router)
+- **React 19**
+- **TypeScript**
+- **Recharts** (データ可視化)
+- **Vanilla CSS** (カスタムデザインシステム)
+
+## セットアップ
 
 ```bash
+# 依存関係のインストール
+npm install
+
+# 開発サーバーの起動
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+ブラウザで http://localhost:3000 を開いてください。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 使い方
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **ウェルカム画面**で「始める」をクリック
+2. **質問画面**で8つのカテゴリーについて、それぞれ3つの具体例を入力
+3. **まとめ画面**で似た回答をグループ化
+4. **分析画面**で各グループの「なぜ？」を深掘り
+5. **結果をエクスポート**してダウンロード
 
-## Learn More
+## プロジェクト構造
 
-To learn more about Next.js, take a look at the following resources:
+```
+app041-value-hierarchy/
+├── app/
+│   ├── page.tsx              # ウェルカム画面
+│   ├── Welcome.module.css
+│   ├── question/[id]/
+│   │   ├── page.tsx          # 質問画面（動的ルート）
+│   │   └── Question.module.css
+│   ├── summary/
+│   │   ├── page.tsx          # まとめ・グルーピング画面
+│   │   └── Summary.module.css
+│   ├── analysis/
+│   │   ├── page.tsx          # 分析・可視化画面
+│   │   └── Analysis.module.css
+│   ├── layout.tsx
+│   └── globals.css           # グローバルスタイル
+├── lib/
+│   ├── types.ts              # 型定義
+│   └── storage.ts            # ローカルストレージ管理
+└── package.json
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## デザインコンセプト
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**「静かな内省の空間」**
 
-## Deploy on Vercel
+- 落ち着いた配色（深い青灰色、紫、金色）
+- 余白を活かしたミニマルデザイン
+- 滑らかなアニメーション
+- レスポンシブ対応
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## プライバシー
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- すべてのデータはブラウザのlocalStorageに保存されます
+- サーバーへのデータ送信は一切ありません
+- データは完全にローカルで管理されます
+
+## ライセンス
+
+このアプリケーションは一般的な自己分析手法を実装したものです。
+
+---
+
+開発: 2025年

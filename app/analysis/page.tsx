@@ -1,0 +1,225 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { loadData, saveData, exportDataAsJSON, exportDataAsText } from '@/lib/storage';
+import { UserData, Insight } from '@/lib/types';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import styles from './Analysis.module.css';
+
+const GROUP_COLORS = [
+    'hsl(0, 70%, 60%)',
+    'hsl(30, 70%, 60%)',
+    'hsl(60, 70%, 60%)',
+    'hsl(120, 70%, 60%)',
+    'hsl(180, 70%, 60%)',
+    'hsl(240, 70%, 60%)',
+    'hsl(280, 70%, 60%)',
+    'hsl(320, 70%, 60%)',
+];
+
+export default function AnalysisPage() {
+    const router = useRouter();
+    const [data, setData] = useState<UserData | null>(null);
+    const [insights, setInsights] = useState<Map<string, string>>(new Map());
+
+    useEffect(() => {
+        const loaded = loadData();
+        if (!loaded || loaded.answers.length === 0) {
+            router.push('/');
+            return;
+        }
+        setData(loaded);
+
+        // 既存のinsightsを読み込み
+        const insightMap = new Map<string, string>();
+        loaded.insights.forEach(insight => {
+            insightMap.set(insight.groupId, insight.reflection);
+        });
+        setInsights(insightMap);
+    }, [router]);
+
+    if (!data) return null;
+
+    const handleInsightChange = (groupId: string, reflection: string) => {
+        const newInsights = new Map(insights);
+        newInsights.set(groupId, reflection);
+        setInsights(newInsights);
+    };
+
+    const handleSaveInsights = () => {
+        const insightArray: Insight[] = Array.from(insights.entries()).map(([groupId, reflection]) => ({
+            groupId,
+            reflection
+        }));
+
+        const updatedData: UserData = {
+            ...data,
+            insights: insightArray,
+            timestamp: Date.now()
+        };
+
+        saveData(updatedData);
+        setData(updatedData);
+    };
+
+    const handleExportJSON = () => {
+        const json = exportDataAsJSON(data);
+        const blob = new Blob([json], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `value-hierarchy-${Date.now()}.json`;
+        a.click();
+    };
+
+    const handleExportText = () => {
+        const text = exportDataAsText(data);
+        const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `value-hierarchy-${Date.now()}.txt`;
+        a.click();
+    };
+
+    // グループごとの回答数を集計
+    const groupData = data.groups.map(group => ({
+        name: group.label,
+        count: group.answerIds.length,
+        color: group.color
+    }));
+
+    return (
+        <div className={styles.container}>
+            <div className={styles.content}>
+                <div className={styles.header}>
+                    <h1>価値観の分析</h1>
+                    <p>グループごとに深掘りして、あなたの価値観を明確にしましょう</p>
+                </div>
+
+                {/* 可視化セクション */}
+                {data.groups.length > 0 && (
+                    <div className={styles.visualization}>
+                        <h2>価値観の分布</h2>
+                        <div className={styles.charts}>
+                            <div className={styles.chartCard}>
+                                <h3>グループ別回答数</h3>
+                                <ResponsiveContainer width="100%" height={300}>
+                                    <BarChart data={groupData}>
+                                        <CartesianGrid strokeDasharray="3 3" />
+                                        <XAxis dataKey="name" />
+                                        <YAxis />
+                                        <Tooltip />
+                                        <Bar dataKey="count" fill="hsl(270, 40%, 50%)" />
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </div>
+
+                            <div className={styles.chartCard}>
+                                <h3>価値観の割合</h3>
+                                <ResponsiveContainer width="100%" height={300}>
+                                    <PieChart>
+                                        <Pie
+                                            data={groupData}
+                                            dataKey="count"
+                                            nameKey="name"
+                                            cx="50%"
+                                            cy="50%"
+                                            outerRadius={100}
+                                            label
+                                        >
+                                            {groupData.map((entry, index) => (
+                                                <Cell key={`cell-${index}`} fill={entry.color} />
+                                            ))}
+                                        </Pie>
+                                        <Tooltip />
+                                        <Legend />
+                                    </PieChart>
+                                </ResponsiveContainer>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* 深掘り質問セクション */}
+                {data.groups.length > 0 ? (
+                    <div className={styles.insights}>
+                        <h2>深掘り分析</h2>
+                        <p>各グループについて「なぜそれをやるのか？」を考えてみましょう</p>
+
+                        <div className={styles.insightList}>
+                            {data.groups.map(group => (
+                                <div
+                                    key={group.id}
+                                    className={styles.insightCard}
+                                    style={{ borderLeftColor: group.color }}
+                                >
+                                    <h3>{group.label}</h3>
+                                    <div className={styles.groupItems}>
+                                        {data.answers
+                                            .filter(a => group.answerIds.includes(a.id))
+                                            .map(answer => (
+                                                <div key={answer.id} className={styles.groupItem}>
+                                                    • {answer.text}
+                                                </div>
+                                            ))}
+                                    </div>
+                                    <div className={styles.reflectionField}>
+                                        <label>なぜこれらのことをやるのか？</label>
+                                        <textarea
+                                            value={insights.get(group.id) || ''}
+                                            onChange={(e) => handleInsightChange(group.id, e.target.value)}
+                                            placeholder="このグループに共通する目的や価値観を書いてください"
+                                        />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className={styles.saveButton}>
+                            <button onClick={handleSaveInsights}>
+                                分析を保存
+                            </button>
+                        </div>
+                    </div>
+                ) : (
+                    <div className={styles.noGroups}>
+                        <p>まだグループが作成されていません。</p>
+                        <button onClick={() => router.push('/summary')}>
+                            まとめ画面に戻る
+                        </button>
+                    </div>
+                )}
+
+                {/* エクスポートセクション */}
+                <div className={styles.export}>
+                    <h2>結果のエクスポート</h2>
+                    <div className={styles.exportButtons}>
+                        <button onClick={handleExportJSON}>
+                            📄 JSONでダウンロード
+                        </button>
+                        <button onClick={handleExportText}>
+                            📝 テキストでダウンロード
+                        </button>
+                    </div>
+                </div>
+
+                <div className={styles.navigation}>
+                    <button
+                        className={styles.backButton}
+                        onClick={() => router.push('/summary')}
+                    >
+                        ← まとめに戻る
+                    </button>
+                    <button
+                        className={styles.homeButton}
+                        onClick={() => router.push('/')}
+                    >
+                        🏠 最初に戻る
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+}

@@ -1,0 +1,216 @@
+.container {
+    min-height: 100vh;
+    background-color: var(--color-bg);
+    padding: var(--spacing-xl) var(--spacing-lg);
+}
+
+.content {
+    max-width: 1200px;
+    margin: 0 auto;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+.header h1 {
+    color: var(--color-primary);
+}
+
+.header p {
+    color: var(--color-text-light);
+    font-size: 1.1rem;
+}
+
+.groupCreator {
+    background-color: var(--color-white);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+    box-shadow: var(--shadow-md);
+}
+
+.groupCreator h2 {
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.groupForm {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-md);
+}
+
+.groupForm input {
+    flex: 1;
+}
+
+.groupForm button {
+    white-space: nowrap;
+}
+
+.existingGroups {
+    margin-bottom: var(--spacing-xl);
+}
+
+.existingGroups h2 {
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-md);
+}
+
+.groupList {
+    display: grid;
+    gap: var(--spacing-md);
+}
+
+.groupCard {
+    background-color: var(--color-white);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    border-left: 4px solid;
+    box-shadow: var(--shadow-sm);
+}
+
+.groupHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+}
+
+.groupHeader h3 {
+    margin: 0;
+    color: var(--color-primary);
+}
+
+.removeButton {
+    background-color: transparent;
+    color: var(--color-text-light);
+    padding: var(--spacing-xs);
+    font-size: 1.2rem;
+    border: none;
+    cursor: pointer;
+}
+
+.removeButton:hover {
+    color: hsl(0, 70%, 50%);
+    transform: none;
+    box-shadow: none;
+}
+
+.groupCard ul {
+    list-style: none;
+    padding: 0;
+}
+
+.groupCard li {
+    padding: var(--spacing-xs) 0;
+    color: var(--color-text);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.groupCard li:last-child {
+    border-bottom: none;
+}
+
+.allAnswers {
+    margin-bottom: var(--spacing-xl);
+}
+
+.allAnswers h2 {
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-md);
+}
+
+.answerGrid {
+    display: grid;
+    gap: var(--spacing-lg);
+}
+
+.categorySection h3 {
+    color: var(--color-secondary);
+    font-size: 1.2rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.answerList {
+    display: grid;
+    gap: var(--spacing-sm);
+}
+
+.answerItem {
+    background-color: var(--color-white);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    border-left: 2px solid var(--color-border);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.answerItem:hover {
+    box-shadow: var(--shadow-sm);
+    transform: translateX(4px);
+}
+
+.answerItem.selected {
+    background-color: hsl(270, 40%, 95%);
+    border-left-color: var(--color-secondary);
+    border-left-width: 4px;
+}
+
+.answerText {
+    color: var(--color-text);
+    font-weight: 500;
+    margin-bottom: var(--spacing-xs);
+}
+
+.answerPurpose {
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    margin-top: var(--spacing-xs);
+    padding-left: var(--spacing-md);
+    border-left: 2px solid var(--color-accent);
+}
+
+.answerGroup {
+    font-size: 0.85rem;
+    color: var(--color-text-light);
+    margin-top: var(--spacing-xs);
+}
+
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-xl);
+}
+
+.backButton,
+.nextButton {
+    flex: 1;
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: 1.1rem;
+}
+
+.backButton {
+    background-color: var(--color-white);
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+}
+
+.nextButton {
+    background: linear-gradient(135deg, var(--color-secondary), var(--color-accent));
+    color: var(--color-white);
+}
+
+@media (max-width: 768px) {
+    .groupForm {
+        flex-direction: column;
+    }
+
+    .navigation {
+        flex-direction: column;
+    }
+}
